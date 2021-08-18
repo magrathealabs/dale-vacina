@@ -1,3 +1,4 @@
+const SHEET_NAME = 'Página1';
 const LOG_LINE = 14;
 const LOG_COLUMN = 4;
 
@@ -36,7 +37,7 @@ function doPost(e){
   var req = null;
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName('Página1');
+    var sheet = ss.getSheetByName(SHEET_NAME);
     sheet.getRange(LOG_LINE, LOG_COLUMN).setValue(JSON.stringify(e));
 
     var parameter = e.parameter;
@@ -124,13 +125,13 @@ function progressBar(sheet, locations) {
   var current_percent = Math.round((current / total) * 100);
   var progress_bar = [];
 
-	for (n = 0; n < 20; n++) {
+  for (n = 0; n < 20; n++) {
     if (current_percent < (n+1)*5) {
     	progress_bar.push("░");
     } else {
     	progress_bar.push("▓"); 
     }    
-	}
+  }
 
   var result = progress_bar.join('') + ' ' + current_percent + '% (' + current + '/' + total + ')';
 
