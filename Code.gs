@@ -90,13 +90,13 @@ function progressBar(sheet, lineNum) {
   var current_percent = Math.round((current / total) * 100);
   var progress_bar = [];
 
-	for (n = 0; n < 20; n++) {
+  for (n = 0; n < 20; n++) {
     if (current_percent < (n+1)*5) {
     	progress_bar.push("░");
     } else {
     	progress_bar.push("▓"); 
     }    
-	}
+  }
 
   var result = progress_bar.join('') + ' ' + current_percent + '% (' + current + '/' + total + ')';
 
