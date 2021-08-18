@@ -19,6 +19,43 @@ O sistema responsável por registrar e procurar pelos vacinados é o Google Shee
 
 ![image](https://user-images.githubusercontent.com/21130697/129918337-c2906f88-f95b-47f6-b6f7-47ed53d45a26.png)
 
+Nesse exemplo, os valores das linhas e colunas serão os seguintes:
+
+```js
+const LOG_LINE = 29;
+const LOG_COLUMN = 4;
+
+const firstDoseLocations = {
+  currentCount: {
+    line: 24,
+    column: 1 
+  },
+  totalCount: {
+    line: 24,
+    column: 2 
+  },
+  users: {
+    line: 24,
+    column: 3
+  }
+}
+
+const secondDoseLocations = {
+  currentCount: {
+    line: 28,
+    column: 1 
+  },
+  totalCount: {
+    line: 28,
+    column: 2 
+  },
+  users: {
+    line: 28,
+    column: 3
+  }
+}
+```
+
 ### App no Slack
 
 Para interagir com a planilha, um app no Slack foi criado com um comando slash. O endpoint dos três comandos é o mesmo, e o que os difere é o texto do comando utilizado.
