@@ -1,9 +1,43 @@
+const LOG_LINE = 14;
+const LOG_COLUMN = 4;
+
+const firstDoseLocations = {
+  currentCount: {
+    line: 8,
+    column: 1 
+  },
+  totalCount: {
+    line: 8,
+    column: 2 
+  },
+  users: {
+    line: 8,
+    column: 3
+  }
+}
+
+const secondDoseLocations = {
+  currentCount: {
+    line: 12,
+    column: 1 
+  },
+  totalCount: {
+    line: 12,
+    column: 2 
+  },
+  users: {
+    line: 12,
+    column: 3
+  }
+}
+
+
 function doPost(e){
   var req = null;
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('Página1');
-    sheet.getRange(14,4).setValue(JSON.stringify(e));
+    sheet.getRange(LOG_LINE, LOG_COLUMN).setValue(JSON.stringify(e));
 
     var parameter = e.parameter;
     var command = parameter.command;
@@ -18,7 +52,7 @@ function doPost(e){
       }
     }
 
-    var progressBarText = twoDosesProgressBars(sheet);
+    var progressBarText = progressBars(sheet);
     req = text ? text + '\n\n' + progressBarText : progressBarText;
     Logger.log(req);
   } catch (error) {
@@ -35,10 +69,12 @@ function doPost(e){
 
 function firstDose(sheet, user) {
   var text;
-  if (alreadyTookFirstDose(sheet, user)) {
+  var alreadyTookFirstDose = alreadyTookDose(sheet, user, firstDoseLocations);
+
+  if (alreadyTookFirstDose) {
     text = 'O usuário ' + user + ' já foi vacinado com a *primeira* dose.';
   } else {
-    incrementFirstDoseCount(sheet, user)
+    incrementDoseCount(sheet, user, firstDoseLocations)
     text = 'O usuário ' + user + ' foi registrado com sucesso para a *primeira* dose!'
   }
   return text;
@@ -46,57 +82,55 @@ function firstDose(sheet, user) {
 
 function secondDose(sheet, user) {
   var text;
-  if (!alreadyTookFirstDose(sheet, user)) {
+  var alreadyTookFirstDose = alreadyTookDose(sheet, user, firstDoseLocations);
+  var alreadyTookSecondDose = alreadyTookDose(sheet, user, secondDoseLocations);
+
+  if (!alreadyTookFirstDose) {
     text = 'O usuário ' + user + ' ainda não foi vacinado com a primeira dose, não foi possível registrar a segunda.';
-  } else if (alreadyTookSecondDose(sheet, user)) {
+  } else if (alreadyTookSecondDose) {
     text = 'O usuário ' + user + ' já foi vacinado com a *segunda* dose.';
   } else {
-    incrementSecondDoseCount(sheet, user)
+    incrementDoseCount(sheet, user, secondDoseLocations)
     text = 'O usuário ' + user + ' foi registrado com sucesso para a *segunda* dose!'
   }
   return text;
 }
 
-function incrementFirstDoseCount(sheet, user) {
-  sheet.getRange(8,1).setValue(sheet.getRange(8,1).getValue() + 1); // increment count
-  sheet.getRange(8,3).setValue(sheet.getRange(8,3).getValue() + ', ' + user);  // count user
+function incrementDoseCount(sheet, user, locations) {
+  sheet.getRange(locations.currentCount.line, locations.currentCount.column).setValue(
+    sheet.getRange(locations.currentCount.line, locations.currentCount.column).getValue() + 1
+  );
+
+  sheet.getRange(locations.users.line, locations.users.column).setValue(
+    sheet.getRange(locations.users.line, locations.users.column).getValue() + ', ' + user
+  );
 }
 
-function alreadyTookFirstDose(sheet, user) {
-  var users = sheet.getRange(8,3).getValue();
+function alreadyTookDose(sheet, user, locations) {
+  var users = sheet.getRange(locations.users.line, locations.users.column).getValue();
   return users.includes(user);
 }
 
-function incrementSecondDoseCount(sheet, user) {
-  sheet.getRange(12,1).setValue(sheet.getRange(12,1).getValue() + 1); // increment count
-  sheet.getRange(12,3).setValue(sheet.getRange(12,3).getValue() + ', ' + user);  // count user
-}
-
-function alreadyTookSecondDose(sheet, user) {
-  var users = sheet.getRange(12,3).getValue();
-  return users.includes(user);
-}
-
-function twoDosesProgressBars(sheet) {
-  var firstDoseBar = progressBar(sheet, 8);
-  var secondDoseBar = progressBar(sheet, 12);
+function progressBars(sheet) {
+  var firstDoseBar = progressBar(sheet, firstDoseLocations);
+  var secondDoseBar = progressBar(sheet, secondDoseLocations);
 
   return 'População da Magrathea Vacinada\n' + firstDoseBar + '\nPopulação da Magrathea Totalmente Vacinada\n' + secondDoseBar
 }
 
-function progressBar(sheet, lineNum) {
-  var total = sheet.getRange(lineNum,2).getValue();
-  var current = sheet.getRange(lineNum,1).getValue();
+function progressBar(sheet, locations) {
+  var total = sheet.getRange(locations.totalCount.line, locations.totalCount.column).getValue();
+  var current = sheet.getRange(locations.currentCount.line, locations.currentCount.column).getValue();
   var current_percent = Math.round((current / total) * 100);
   var progress_bar = [];
 
-  for (n = 0; n < 20; n++) {
+	for (n = 0; n < 20; n++) {
     if (current_percent < (n+1)*5) {
     	progress_bar.push("░");
     } else {
     	progress_bar.push("▓"); 
     }    
-  }
+	}
 
   var result = progress_bar.join('') + ' ' + current_percent + '% (' + current + '/' + total + ')';
 
