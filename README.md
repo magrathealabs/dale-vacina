@@ -14,8 +14,8 @@ App do Slack para acompanhar o progresso da vacinação entre as pessoas da Magr
 
 ## Detalhes Técnicos
 
-### Servidor e Banco de Dados
-O sistema responsável por registrar e procurar pelos vacinados é o Google Sheets (Banco de Dados) com o uso do Google Apps Script (Servidor). Um exemplo da planilha utilizada se encontra abaixo.
+### "Servidor" e Banco de Dados
+O sistema responsável por registrar e procurar pelos vacinados é o Google Sheets (Banco de Dados) com o uso do Google Apps Script ("Servidor"). Um exemplo da planilha utilizada se encontra abaixo.
 
 ![image](https://user-images.githubusercontent.com/21130697/129918337-c2906f88-f95b-47f6-b6f7-47ed53d45a26.png)
 
