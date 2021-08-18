@@ -4,7 +4,7 @@ App do Slack para acompanhar o progresso da vacinação entre as pessoas da Magr
 
 ## Uso
 
-- `/vacina`: retorna as barras de progressos da vacinação da primeira e segunda dose
+- `/vacina`: retorna as barras de progresso da vacinação da primeira e segunda dose
   ![vacina](https://user-images.githubusercontent.com/21130697/129917407-fafb7487-08f3-4cfc-b184-11a5f962b447.png)
 - `/vacina1dose @user`: registra o @user com a primeira dose e retorna as barras de progresso
   ![vacina1dose](https://user-images.githubusercontent.com/21130697/129917420-9b9477d5-3179-481b-8fa2-adba4d6c5922.png)
